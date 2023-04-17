@@ -5,5 +5,8 @@
 }
 
 body {
+    background: #DDDDDD;
+    color: #000000;
     -webkit-font-smoothing: antialiased;
+    font-family: 'Roboto', sans-serif;
 }
