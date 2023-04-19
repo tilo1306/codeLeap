@@ -23,7 +23,7 @@ export function Load() {
         dispatch(setName(localStorageUsername))
         navigate('/mainscreen')
       }
-    }, 3000)
+    }, 4000)
   }, [])
 
   return (
