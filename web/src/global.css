@@ -8,5 +8,12 @@ body {
     background: #DDDDDD;
     color: #000000;
     -webkit-font-smoothing: antialiased;
-    font-family: 'Roboto', sans-serif;
+}
+
+body,
+input,
+textarea,
+button {
+    font-family: "Roboto", sans-serif;
+    font-weight: 400;
 }
