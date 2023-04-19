@@ -1,9 +1,12 @@
 import { RouterProvider } from "react-router-dom"
 import { MainRoutes } from "./routes/MainRoutes"
+import { Container } from "./styles"
 
 function App() {
   return (
-    <MainRoutes />
+    <Container>
+      <MainRoutes />
+    </Container>
   )
 }
 
