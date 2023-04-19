@@ -35,7 +35,12 @@ export const AreaButton = styled.div`
     height: 100%;
     justify-content: end;
     width: 100%;
-    margin-top: 40px;
+    margin-top: 2.5rem;
+     @media (max-width: 546px) {
+        height: 100%;
+        margin-top: 1rem;
+    }
+    
 `
 export const ButtomCancel = styled.button`
     background:  ${({theme})=> theme.COLORS.WHITE};
