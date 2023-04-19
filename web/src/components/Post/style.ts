@@ -7,18 +7,27 @@ export const AreaPost = styled.form`
     height: 20.875rem;
     margin: 1.5rem;
     padding: 1.5rem;
+    @media (max-width: 354px) {
+        height: auto;
+    }
 `
 
 export const HeaderTitle = styled.h1`
     color: ${({theme})=> theme.COLORS.BLACK};
     font-weight: 700;
     font-size: ${({theme})=> theme.FONT_SIZE.XL}px;
+    @media (max-width: 375px) {
+        font-size: ${({theme})=> theme.FONT_SIZE.LG}px;
+    }
 `
 
 export const Text = styled.p`
     color: ${({theme})=> theme.COLORS.BLACK};
     font-size: ${({theme})=> theme.FONT_SIZE.MD}px;
     margin: 1.5rem 0 0.5rem 0;
+    @media (max-width: 375px) {
+        font-size: ${({theme})=> theme.FONT_SIZE.SM}px;
+    }
 `
 
 export const Input = styled.input`
@@ -29,7 +38,7 @@ export const Input = styled.input`
     width: 100%;
 `
 
-export const Div = styled.div`
+export const AreaButton = styled.div`
     display: flex;
     justify-content: flex-end;
     margin-top: 1rem; 

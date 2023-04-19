@@ -1,22 +1,23 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-    border:  1px solid #999999;
+    border:  1px solid ${({theme})=> theme.COLORS.GRAY60};
     border-radius: 16px;
     display: flex;
-    height: 19.75rem;
     flex-direction: column;
     margin: 1.5rem;
+    height: auto;
 `
 export const Header = styled.header`
     background: ${({theme})=> theme.COLORS.BLUE};
     border-radius: 0.875rem 0.875rem 0 0 ;
     display: flex;
     flex-direction: row;
-    height: 4.375rem;
+    min-height: 4.375rem;
     justify-content: space-between;
     padding: 1.5rem;
     width: 100%;
+
 `
 
 export const HeaderTitle = styled.h1`
@@ -25,8 +26,10 @@ export const HeaderTitle = styled.h1`
     font-weight: 700;
     max-width: 80%;
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    word-wrap: break-word;
+    @media (max-width: 455px) {
+        font-size: ${({theme})=> theme.FONT_SIZE.LG}px;
+    }
 `
 
 export const ContextArea = styled.div`
@@ -42,27 +45,49 @@ export const HeaderContext = styled.header`
     justify-content: space-between;
     margin-bottom: 1rem;
     width: 100%;
+    @media (max-width: 455px) {
+        display: flex;
+        flex-direction: column;
+        height: auto;
+
+    }
 `
 
 export const Text = styled.p`
     color: ${({theme})=> theme.COLORS.DARKGRAY1};
     font-size: ${({theme})=> theme.FONT_SIZE.LG}px;
     font-weight: 700;
+
+     @media (max-width: 455px) {
+        margin-top: 0;
+        font-size: ${({theme})=> theme.FONT_SIZE.MD}px;
+    }
 `
 
 export const Time = styled.time`
     color: ${({theme})=> theme.COLORS.DARKGRAY1};
     font-size: ${({theme})=> theme.FONT_SIZE.LG}px;
+    @media (max-width: 450px) {
+        margin-top: 0.3rem;
+        font-size: ${({theme})=> theme.FONT_SIZE.MD}px;
+    }
 `
 
 export const AreaTextContext = styled.div`
     flex: 1;
-    max-height: 55%;
+    min-height: 100%;
     overflow: hidden;
     text-overflow: clip; 
+   
 `
 
 export const TextContext = styled.p`
     color: ${({theme})=> theme.COLORS.BLACK};
     font-size: ${({theme})=> theme.FONT_SIZE.LG}px;
+    word-wrap: break-word;
+
+     @media (max-width: 450px) {
+        font-size: ${({theme})=> theme.FONT_SIZE.MD}px;
+    }
+    
 `
