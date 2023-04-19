@@ -4,8 +4,11 @@ export default {
 
     DARKGRAY1: "#777777",
     GRAY: "#DDDDDD",
-    BLUE: "#7695EC"
-
+    BLUE: "#7695EC",
+    BLACK: "#000000",
+    RED: "#FF5151",
+    GREEN: "#74B960",
+    GRAY60: "#999999" 
   },
   FONT_FAMILY: {
     REGULAR: 'Roboto',
@@ -14,6 +17,6 @@ export default {
     SM: 14,
     MD: 16,
     LG: 18,
-    XL: 24
+    XL: 22
   }
 }
