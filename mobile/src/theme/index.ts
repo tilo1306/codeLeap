@@ -8,15 +8,17 @@ export default {
     BLACK: '#000000',
     RED: '#FF5151',
     GREEN: '#74B960',
-    GRAY60: '#999999',
+    GRAY60: '#999999'
   },
   FONT_FAMILY: {
-    REGULAR: 'Roboto',
+    REGULAR: 'Roboto_400Regular',
+    BOLD: 'Roboto_700Bold'
   },
   FONT_SIZE: {
+    XS: 12,
     SM: 14,
     MD: 16,
     LG: 18,
-    XL: 22,
-  },
+    XL: 22
+  }
 }
