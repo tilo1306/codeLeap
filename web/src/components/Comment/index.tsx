@@ -1,4 +1,5 @@
-import { useAppSelector } from '../../redux/hooks/useAppSelector'
+/* eslint-disable camelcase */
+import { useAppSelector } from '@redux/hooks/useAppSelector'
 import { Icons } from '../Icons'
 import {
   Container,
@@ -10,7 +11,7 @@ import {
   TextContext,
   Time,
   AreaTextContext,
-} from './style'
+} from './styles'
 import { format, formatDistanceToNow } from 'date-fns'
 
 interface Props {
@@ -19,8 +20,6 @@ interface Props {
   created_datetime: string
   title: string
   content: string
-  modalDeleteActive: (id: number) => void
-  modalUpdateActive: (id: number) => void
 }
 
 export function Comment({
@@ -29,48 +28,33 @@ export function Comment({
   id,
   title,
   username,
-  modalDeleteActive,
-  modalUpdateActive,
 }: Props) {
   const user = useAppSelector((state) => state.user)
   const publishedDateFormatted = format(
-    Date.parse(created_datetime),
+    Date.parse(created_datetime as string),
     "d 'in' LLLL 'to the' HH:mm'h'",
     {},
   )
 
   const publishedDateRelativeToNow = formatDistanceToNow(
-    Date.parse(created_datetime),
+    Date.parse(created_datetime as string),
     {
       addSuffix: true,
     },
   )
 
-  const handleOpenModalDelete = () => {
-    modalDeleteActive(id)
-  }
-
-  const HandleOpenModalUpdate = () => {
-    modalUpdateActive(id)
-  }
-
   return (
     <Container>
       <Header>
         <HeaderTitle>{title}</HeaderTitle>
-        {user.name === username ? (
-          <Icons
-            activeModalDelete={handleOpenModalDelete}
-            activeModalUpdate={HandleOpenModalUpdate}
-          />
-        ) : null}
+        {user.name === username ? <Icons postId={id} /> : null}
       </Header>
       <ContextArea>
         <HeaderContext>
           <Text>@{username}</Text>
           <Time
             title={publishedDateFormatted}
-            dateTime={new Date(created_datetime).toISOString()}
+            dateTime={new Date(created_datetime as string).toISOString()}
           >
             {publishedDateRelativeToNow}
           </Time>

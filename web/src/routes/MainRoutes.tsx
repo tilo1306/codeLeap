@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router-dom'
-import { MainScreen } from '../pages/MainScreen'
-import { SignUp } from '../pages/SignUp'
-import { Load } from '../pages/Load'
+import { MainScreen } from '@pages/MainScreen'
+import { SignUp } from '@pages/SignUp'
+import { Load } from '@pages/Load'
 
 export const MainRoutes = () => {
   return (

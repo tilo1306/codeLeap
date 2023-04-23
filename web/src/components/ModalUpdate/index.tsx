@@ -2,26 +2,33 @@ import { useState } from 'react'
 import {
   AreaButton,
   Text,
-  ButtomCancel,
-  ButtomSave,
   Container,
   AreaModal,
   HeaderTitle,
   TextArea,
   Input,
-} from './style'
+} from './styles'
+import { useAppDispatch, useAppSelector } from '@redux/hooks/useAppSelector'
+import { setModalUpdate } from '@actions/modal'
+import { updatePost } from '@redux/thunks/postThunks'
+import { Button } from '../Button'
 
-interface Props {
-  cancelModelClosed: () => void
-  updatePost: (title: string, content: string) => void
-}
-
-export function ModalUpdate({ cancelModelClosed, updatePost }: Props) {
+export function ModalUpdate() {
   const [title, setTitle] = useState('')
-  const [post, setPost] = useState('')
+  const [content, setContent] = useState('')
+
+  const dispatch = useAppDispatch()
+
+  const { id } = useAppSelector((state) => state.modal)
 
   const handleUpdatePost = () => {
-    updatePost(title, post)
+    const update = {
+      id,
+      title,
+      content,
+    }
+    dispatch(updatePost(update))
+    dispatch(setModalUpdate(false))
   }
 
   return (
@@ -47,17 +54,20 @@ export function ModalUpdate({ cancelModelClosed, updatePost }: Props) {
           required
           placeholder="Content here"
           maxLength={250}
-          value={post}
-          onChange={({ target }) => setPost(target.value)}
+          value={content}
+          onChange={({ target }) => setContent(target.value)}
         />
         <AreaButton>
-          <ButtomCancel onClick={cancelModelClosed}>Cancel</ButtomCancel>
-          <ButtomSave
-            disabled={!!(title.length === 0 || post.length === 0)}
-            onClick={handleUpdatePost}
+          <Button type="button" onClick={() => dispatch(setModalUpdate(false))}>
+            Cancel
+          </Button>
+          <Button
+            type="submit"
+            disabled={!!(title.length === 0 || content.length === 0)}
+            styleType="secondary"
           >
             Save
-          </ButtomSave>
+          </Button>
         </AreaButton>
       </AreaModal>
     </Container>

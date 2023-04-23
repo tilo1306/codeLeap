@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Comment } from '../../components/Comment'
 import { Post } from '../../components/Post'
-import { api } from '../../utils/axios'
 import {
   Button,
   Container,
@@ -10,49 +10,29 @@ import {
   Title,
   AreaButton,
   ArearForm,
-} from './style'
-import { useAppSelector } from '../../redux/hooks/useAppSelector'
-import { ModalDelete } from '../../components/ModalDelete'
-import { useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
-import { setName } from '../../redux/reducers/userReducer'
-import { ModalUpdate } from '../../components/ModalUpdate'
-
-export interface Posts {
-  id: number
-  username: string
-  created_datetime: string
-  title: string
-  content: string
-}
-
-export interface ResponseApi {
-  count: string
-  next: string | null
-  previous: string | null
-  results: Posts[]
-}
+} from './styles'
+import {
+  useAppDispatch,
+  useAppSelector,
+} from '../../redux/hooks/useAppSelector'
+import { ModalDelete } from '@components/ModalDelete'
+import { ModalUpdate } from '@components/ModalUpdate'
+import { getAllPost, paginationPost } from '@redux/thunks/postThunks'
+import { setName } from '@actions/user'
+import { Loading } from '@components/Loading'
 
 export function MainScreen() {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
+
   const navigate = useNavigate()
 
-  const user = useAppSelector((state) => state.user)
   const localStorageUsername = localStorage.getItem('username')
 
-  const [loading, setLoading] = useState(false)
-  const [data, setData] = useState<ResponseApi>()
-  const [listPost, setListPost] = useState<Posts[]>([])
-  const [page, setPage] = useState(0)
-  const [modalDeleteOpen, setModalDeleteOpen] = useState(false)
-  const [modalUpdateOpen, setModalUpdateOpen] = useState(false)
-  const [idPost, setIdPost] = useState(0)
-
-  const loadApi = async (): Promise<void> => {
-    const json = (await api.allPosts()) as ResponseApi
-    setListPost(json.results)
-    setData(json)
-  }
+  const { name } = useAppSelector((state) => state.user)
+  const { data, isLoading } = useAppSelector((state) => state.posts)
+  const { isModalDelete, isModalUpdate } = useAppSelector(
+    (state) => state.modal,
+  )
 
   const scrollToTop = () => {
     window.scrollTo({
@@ -61,72 +41,28 @@ export function MainScreen() {
     })
   }
 
-  const pagination = async (): Promise<void> => {
-    scrollToTop()
-    if (page < 10) {
-      const json = (await api.allPosts()) as ResponseApi
-      setListPost(json.results)
-      setData(json)
-    } else {
-      const json = (await api.pagination(page)) as ResponseApi
-      setListPost(json.results)
-      setData(json)
+  const handleNextPagination = () => {
+    if (data.next) {
+      dispatch(paginationPost(data.next))
+      scrollToTop()
     }
   }
 
-  const handleClickPost = async (title: string, content: string) => {
-    await api.createPost(user.name, title, content)
-    await loadApi()
-  }
-
-  const handleModalDeleteOpen = (id: number) => {
-    setModalDeleteOpen(true)
-    setIdPost(id)
-  }
-  const handleModalUpdateOpen = (id: number) => {
-    setModalUpdateOpen(true)
-    setIdPost(id)
-  }
-
-  const handleCancelModel = () => {
-    setModalDeleteOpen(false)
-    setModalUpdateOpen(false)
-  }
-  const handleDeletePost = async () => {
-    await api.deletePost(idPost)
-    await loadApi()
-    setModalDeleteOpen(false)
-  }
-
-  const handleUpdatePost = async (title: string, content: string) => {
-    await api.updatePost(idPost, title, content)
-    await loadApi()
-    setModalUpdateOpen(false)
+  const handlePreviousPagination = () => {
+    if (data.previous) {
+      dispatch(paginationPost(data.previous))
+      scrollToTop()
+    }
   }
 
   useEffect(() => {
-    if (user.name === '' && localStorageUsername === null) {
+    if (name === '' && localStorageUsername === null) {
       navigate('/signup')
     } else {
       dispatch(setName(localStorageUsername))
+      dispatch(getAllPost())
     }
-  }, [])
-
-  useEffect(() => {
-    try {
-      setLoading(true)
-      setTimeout(() => {
-        loadApi()
-      }, 1000)
-      setLoading(false)
-    } catch (error) {
-      console.log(error)
-    }
-  }, [])
-
-  useEffect(() => {
-    pagination()
-  }, [page])
+  }, [dispatch])
 
   return (
     <Container>
@@ -134,10 +70,10 @@ export function MainScreen() {
         <Header>
           <Title>CodeLeap Network</Title>
         </Header>
-        <Post createPost={handleClickPost} />
-        {loading && <div>Loading..</div>}
-        {!loading &&
-          listPost?.map((post) => (
+        <Post />
+        {isLoading && <Loading />}
+        {!isLoading &&
+          data.results.map((post) => (
             <Comment
               key={post.id}
               id={post.id}
@@ -145,37 +81,25 @@ export function MainScreen() {
               created_datetime={post.created_datetime}
               title={post.title}
               username={post.username}
-              modalDeleteActive={handleModalDeleteOpen}
-              modalUpdateActive={handleModalUpdateOpen}
             />
           ))}
         <AreaButton>
           <Button
-            onClick={() => setPage((old) => Math.max(old - 10, 0))}
-            disabled={page < 10}
+            onClick={handlePreviousPagination}
+            disabled={data.previous === null}
           >
             back
           </Button>
           <Button
-            onClick={() => setPage((old) => old + 10)}
-            disabled={data?.next === null}
+            onClick={handleNextPagination}
+            disabled={data?.next === null || isLoading}
           >
             next
           </Button>
         </AreaButton>
       </ArearForm>
-      {modalDeleteOpen && (
-        <ModalDelete
-          cancelModelClosed={handleCancelModel}
-          deletePost={handleDeletePost}
-        />
-      )}
-      {modalUpdateOpen && (
-        <ModalUpdate
-          cancelModelClosed={handleCancelModel}
-          updatePost={handleUpdatePost}
-        />
-      )}
+      {isModalDelete && <ModalDelete />}
+      {isModalUpdate && <ModalUpdate />}
     </Container>
   )
 }

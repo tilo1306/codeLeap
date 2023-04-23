@@ -1,10 +1,10 @@
 import { BrowserRouter } from 'react-router-dom'
-import { MainRoutes } from './routes/MainRoutes'
+import { MainRoutes } from '@routes/MainRoutes'
 import { Provider } from 'react-redux'
-import { store } from './redux/store'
+import { store } from '@redux/store'
 import { ThemeProvider } from 'styled-components'
-import theme from './styles/theme'
-import { GlobalStyle } from './styles/global'
+import theme from '@styles/theme'
+import { GlobalStyle } from '@styles/global'
 
 function App() {
   return (

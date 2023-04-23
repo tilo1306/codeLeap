@@ -4,21 +4,29 @@ import {
   HeaderTitle,
   Text,
   AreaButton,
-  Buttom,
   Input,
   TextArea,
-} from './style'
+} from './styles'
+import { useAppDispatch, useAppSelector } from '@redux/hooks/useAppSelector'
+import { createPost } from '@redux/thunks/postThunks'
+import { Button } from '../Button'
 
-interface Props {
-  createPost: (title: string, content: string) => void
-}
-
-export function Post({ createPost }: Props) {
+export function Post() {
   const [title, setTitle] = useState('')
   const [post, setPost] = useState('')
 
+  const { name } = useAppSelector((state) => state.user)
+
+  const dispatch = useAppDispatch()
+
   const handleCreatePost = () => {
-    createPost(title, post)
+    const newPost = {
+      username: name,
+      title,
+      content: post,
+    }
+
+    dispatch(createPost(newPost))
     setTitle('')
     setPost('')
   }
@@ -48,12 +56,13 @@ export function Post({ createPost }: Props) {
         onChange={({ target }) => setPost(target.value)}
       />
       <AreaButton>
-        <Buttom
+        <Button
           disabled={!!(title.trim().length === 0 || post.trim().length === 0)}
           type="submit"
+          styleType="quaternary"
         >
           Enter
-        </Buttom>
+        </Button>
       </AreaButton>
     </AreaPost>
   )

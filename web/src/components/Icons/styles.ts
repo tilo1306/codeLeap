@@ -14,12 +14,14 @@ export const Container = styled.div`
 export const TrashIcon = styled.img`
   height: 1.406rem;
   width: 1.125rem;
+  cursor: pointer;
 `
 export const UnionImg = styled.div`
   height: 1.406rem;
   position: relative;
   width: 1.463rem;
   margin-left: 2.125rem;
+  cursor: pointer;
   @media (max-width: 605px) {
     margin-left: 1rem;
     align-items: center;
