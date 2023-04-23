@@ -51,17 +51,3 @@ export const TextArea = styled.textarea`
   resize: none;
   width: 100%;
 `
-
-export const Buttom = styled.button`
-  background: ${({ theme }) => theme.COLORS.BLUE};
-  border: none;
-  border-radius: 8px;
-  color: ${({ theme }) => theme.COLORS.WHITE};
-  font-size: ${({ theme }) => theme.FONT_SIZE.MD}px;
-  font-weight: 700;
-  height: 2rem;
-  width: 7.5rem;
-  :disabled {
-    background-color: white;
-  }
-`

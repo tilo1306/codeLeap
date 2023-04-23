@@ -1,8 +1,9 @@
 import { useState } from 'react'
-import { AreaLogin, Container, Title, Text, Input, Buttom, Div } from './styles'
+import { AreaLogin, Container, Title, Text, Input, Div } from './styles'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { setName } from '../../redux/reducers/userReducer'
+import { setName } from '@actions/user'
+import { Button } from '@/components/Button'
 
 export function SignUp() {
   const dispatch = useDispatch()
@@ -34,7 +35,13 @@ export function SignUp() {
           onChange={({ target }) => setUsername(target.value)}
         />
         <Div>
-          <Buttom disabled={username.length === 0}>Enter</Buttom>
+          <Button
+            type="submit"
+            disabled={username.length === 0}
+            styleType="quinary"
+          >
+            Enter
+          </Button>
         </Div>
       </AreaLogin>
     </Container>

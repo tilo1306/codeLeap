@@ -1,15 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/alt-text */
-import { Container, Image } from './style'
+import { Container, Image } from './styles'
 import Logo from '../../assets/logo.svg'
 import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
-import { useAppSelector } from '../../redux/hooks/useAppSelector'
-import { useDispatch } from 'react-redux'
-import { setName } from '../../redux/reducers/userReducer'
+import { useAppDispatch, useAppSelector } from '@redux/hooks/useAppSelector'
+import { setName } from '@actions/user'
 
 export function Load() {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
   const user = useAppSelector((state) => state.user)
   const localStorageUsername = localStorage.getItem('username')

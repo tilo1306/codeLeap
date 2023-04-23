@@ -4,6 +4,7 @@ export const Container = styled.div`
   background: ${({ theme }) => theme.COLORS.GRAY};
   padding: 0 1.5rem 1.5rem 1.5rem;
   width: 100vw;
+  min-height: 100vh;
 `
 
 export const ArearForm = styled.div`

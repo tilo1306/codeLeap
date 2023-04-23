@@ -42,37 +42,3 @@ export const Div = styled.div`
   justify-content: flex-end;
   margin-top: 1rem;
 `
-
-export const Buttom = styled.button`
-  background: ${({ theme }) => theme.COLORS.BLUE};
-  border: none;
-  border-radius: 8px;
-  color: ${({ theme }) => theme.COLORS.WHITE};
-  height: 2rem;
-  font-size: ${({ theme }) => theme.FONT_SIZE.MD}px;
-  font-weight: 700;
-  width: 6.938rem;
-  :enabled {
-    animation: flasher 1s;
-
-    @keyframes flasher {
-      0% {
-        opacity: 0.3;
-      }
-      50% {
-        opacity: 0.7;
-      }
-      100% {
-        opacity: 1;
-      }
-    }
-  }
-  :hover:enabled {
-    cursor: pointer;
-    transform: scale(1.1);
-    transition: all 0.5s;
-  }
-  :disabled {
-    opacity: 0.3;
-  }
-`

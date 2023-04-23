@@ -41,34 +41,3 @@ export const AreaButton = styled.div`
     margin-top: 1rem;
   }
 `
-export const ButtomCancel = styled.button`
-  background: ${({ theme }) => theme.COLORS.WHITE};
-  border: 1px solid ${({ theme }) => theme.COLORS.GRAY60};
-  border-radius: 8px;
-  color: ${({ theme }) => theme.COLORS.BLACK};
-  font-size: ${({ theme }) => theme.FONT_SIZE.MD}px;
-  font-weight: 700;
-  height: 2rem;
-  margin-right: 1rem;
-  width: 7.5rem;
-  :hover:enabled {
-    cursor: pointer;
-    transform: scale(1.1);
-    transition: all 0.5s;
-  }
-`
-export const ButtomDelete = styled.button`
-  background: ${({ theme }) => theme.COLORS.RED};
-  border-radius: 8px;
-  color: ${({ theme }) => theme.COLORS.WHITE};
-  font-size: ${({ theme }) => theme.FONT_SIZE.MD}px;
-  font-weight: 700;
-  height: 2rem;
-  width: 7.5rem;
-  border: none;
-  :hover:enabled {
-    cursor: pointer;
-    transform: scale(1.1);
-    transition: all 0.5s;
-  }
-`
