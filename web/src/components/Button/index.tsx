@@ -7,13 +7,20 @@ import {
   TertiaryStyles,
   QuaternaryStyles,
   QuinaryStyles,
+  SenaryStyles,
 } from './styles'
 
 interface IProps {
   type: 'button' | 'reset' | 'submit'
   children: React.ReactNode
   onClick?: React.MouseEventHandler<HTMLButtonElement>
-  styleType?: 'primary' | 'secondary' | 'tertiary' | 'quaternary' | 'quinary'
+  styleType?:
+    | 'primary'
+    | 'secondary'
+    | 'tertiary'
+    | 'quaternary'
+    | 'quinary'
+    | 'senary'
   disabled?: boolean
 }
 
@@ -23,6 +30,7 @@ const buttonStyleTypes: IButtonStyles = {
   tertiary: TertiaryStyles,
   quaternary: QuaternaryStyles,
   quinary: QuinaryStyles,
+  senary: SenaryStyles,
 }
 
 export function Button({

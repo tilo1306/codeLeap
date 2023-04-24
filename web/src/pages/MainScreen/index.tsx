@@ -3,14 +3,7 @@ import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Comment } from '../../components/Comment'
 import { Post } from '../../components/Post'
-import {
-  Button,
-  Container,
-  Header,
-  Title,
-  AreaButton,
-  ArearForm,
-} from './styles'
+import { Container, Header, Title, AreaButton, ArearForm } from './styles'
 import {
   useAppDispatch,
   useAppSelector,
@@ -20,6 +13,7 @@ import { ModalUpdate } from '@components/ModalUpdate'
 import { getAllPost, paginationPost } from '@redux/thunks/postThunks'
 import { setName } from '@actions/user'
 import { Loading } from '@components/Loading'
+import { Button } from '@/components/Button'
 
 export function MainScreen() {
   const dispatch = useAppDispatch()
@@ -41,6 +35,11 @@ export function MainScreen() {
     })
   }
 
+  const handleFirstPage = () => {
+    dispatch(getAllPost())
+    scrollToTop()
+  }
+
   const handleNextPagination = () => {
     if (data.next) {
       dispatch(paginationPost(data.next))
@@ -51,6 +50,18 @@ export function MainScreen() {
   const handlePreviousPagination = () => {
     if (data.previous) {
       dispatch(paginationPost(data.previous))
+      scrollToTop()
+    }
+  }
+
+  const handleLastPage = () => {
+    if (data.next) {
+      const numberPage = Math.floor(Number(data.count) / 10) * 10
+
+      const lastPage = data.next.slice(0, -2) + numberPage
+
+      dispatch(paginationPost(lastPage))
+
       scrollToTop()
     }
   }
@@ -85,16 +96,36 @@ export function MainScreen() {
           ))}
         <AreaButton>
           <Button
+            type="button"
+            styleType="senary"
+            onClick={handleFirstPage}
+            disabled={data.previous === null}
+          >
+            {'<<'}
+          </Button>
+          <Button
+            type="button"
+            styleType="senary"
             onClick={handlePreviousPagination}
             disabled={data.previous === null}
           >
             back
           </Button>
           <Button
+            type="button"
+            styleType="senary"
             onClick={handleNextPagination}
             disabled={data?.next === null || isLoading}
           >
             next
+          </Button>
+          <Button
+            type="button"
+            styleType="senary"
+            onClick={handleLastPage}
+            disabled={data?.next === null || isLoading}
+          >
+            {'>>'}
           </Button>
         </AreaButton>
       </ArearForm>
