@@ -1,5 +1,5 @@
 import { Icons } from '@components/Icons'
-import { useAppSelector } from '../../redux/hooks/useAppSelector'
+import { useAppSelector } from '@redux/hooks/useAppSelector'
 import {
   Container,
   ContextArea,
@@ -10,8 +10,8 @@ import {
   Time,
   AreaTextContext,
   Username
-} from './style'
-import { format, formatDistanceToNow } from 'date-fns'
+} from './styles'
+import { formatDistanceToNow } from 'date-fns'
 
 interface Props {
   id: number
@@ -19,8 +19,6 @@ interface Props {
   created_datetime: string
   title: string
   content: string
-  modalDeleteActive: (id: number) => void
-  modalUpdateActive: (id: number) => void
 }
 
 export function Comment({
@@ -28,9 +26,7 @@ export function Comment({
   created_datetime,
   id,
   title,
-  username,
-  modalDeleteActive,
-  modalUpdateActive
+  username
 }: Props) {
   const user = useAppSelector((state) => state.user)
 
@@ -41,24 +37,11 @@ export function Comment({
     }
   )
 
-  const handleOpenModalDelete = () => {
-    modalDeleteActive(id)
-  }
-
-  const HandleOpenModalUpdate = () => {
-    modalUpdateActive(id)
-  }
-
   return (
     <Container>
       <Header>
         <HeaderTitle>{title}</HeaderTitle>
-        {user.name === username ? (
-          <Icons
-            activeModalDelete={handleOpenModalDelete}
-            activeModalUpdate={HandleOpenModalUpdate}
-          />
-        ) : null}
+        {user.name === username ? <Icons postId={id} /> : null}
       </Header>
       <ContextArea>
         <HeaderContext>

@@ -5,23 +5,35 @@ import {
   TrashIcon,
   TrashIconArea,
   UnionImg
-} from './style'
+} from './styles'
 import TrashImg from '@assets/Trash.png'
 import EditImg from '@assets/Edit.png'
 import PenImg from '@assets/Pen.png'
-import { TouchableHighlight } from 'react-native'
+import { useAppDispatch } from '@redux/hooks/useAppSelector'
+import { setModalDelete, setModalId, setModalUpdate } from '@actions/modal'
 interface Props {
-  activeModalDelete: () => void
-  activeModalUpdate: () => void
+  postId: number
 }
 
-export function Icons({ activeModalDelete, activeModalUpdate }: Props) {
+export function Icons({ postId }: Props) {
+  const dispatch = useAppDispatch()
+
+  const handleDeletepost = () => {
+    dispatch(setModalId(postId))
+    dispatch(setModalDelete(true))
+  }
+
+  const handleUpdatepost = () => {
+    dispatch(setModalId(postId))
+    dispatch(setModalUpdate(true))
+  }
+
   return (
     <Container>
-      <TrashIconArea onPress={activeModalDelete}>
+      <TrashIconArea onPress={handleDeletepost}>
         <TrashIcon source={TrashImg} />
       </TrashIconArea>
-      <UnionImg onPress={activeModalUpdate}>
+      <UnionImg onPress={handleUpdatepost}>
         <EditIcon source={EditImg} />
         <PenIcon source={PenImg} />
       </UnionImg>

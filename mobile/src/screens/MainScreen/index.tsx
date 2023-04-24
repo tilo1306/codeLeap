@@ -1,49 +1,28 @@
+import { useEffect, useRef, useState } from 'react'
+import { FlatList, Platform } from 'react-native'
 import { Post } from '@components/Post'
 import { Comment } from '@components/Comment'
 
 import {
   AreaButton,
   ArearForm,
-  Button,
-  ButtonText,
   Container,
   Header,
   KeyboardArea,
   Title
-} from './style'
+} from './styles'
 
-import { FlatList, Platform } from 'react-native'
-import { useEffect, useRef, useState } from 'react'
-import { api } from '@utils/axios'
-import { useDispatch } from 'react-redux'
-import { useAppSelector } from '@redux/hooks/useAppSelector'
+import { useAppDispatch, useAppSelector } from '@redux/hooks/useAppSelector'
 import { ListEmpty } from '@components/ListEmpty'
 import { ModalDelete } from '@components/ModalDelete'
 import { ModalUpdate } from '@components/ModalUpdate'
-
-export interface Posts {
-  id: number
-  username: string
-  created_datetime: string
-  title: string
-  content: string
-}
-
-export interface ResponseApi {
-  count: string
-  next: string | null
-  previous: string | null
-  results: Posts[]
-}
+import { getAllPost, paginationPost } from '@redux/thunks/postThunks'
+import { Button } from '@components/Button'
 
 export function MainScreen() {
-  const [data, setData] = useState<ResponseApi>()
-  const [listPost, setListPost] = useState<Posts[]>([])
-  const [page, setPage] = useState(0)
-  const [idPost, setIdPost] = useState(0)
-  const user = useAppSelector((state) => state.user)
-  const [modalDeleteOpen, setModalDeleteOpen] = useState(false)
-  const [modalUpdateOpen, setModalUpdateOpen] = useState(false)
+  const dispatch = useAppDispatch()
+
+  const { data, isLoading } = useAppSelector((state) => state.posts)
 
   const flatListRef = useRef<FlatList>(null)
 
@@ -52,90 +31,54 @@ export function MainScreen() {
       flatListRef.current.scrollToOffset({ animated: true, offset: 0 })
     }
   }
-  const loadApi = async (): Promise<void> => {
-    const json = (await api.allPosts()) as ResponseApi
-    setListPost(json.results)
-    setData(json)
+
+  const handleFirstPage = () => {
+    dispatch(getAllPost())
+    goToTop()
   }
 
-  const pagination = async (): Promise<void> => {
-    if (page < 10) {
-      const json = (await api.allPosts()) as ResponseApi
-      setListPost(json.results)
-      setData(json)
-    } else {
-      const json = (await api.pagination(page)) as ResponseApi
-      setListPost(json.results)
-      setData(json)
+  const handleNextPagination = () => {
+    if (data.next) {
+      dispatch(paginationPost(data.next))
+      goToTop()
     }
   }
 
-  const handleClickCreatePost = async (title: string, content: string) => {
-    await api.createPost(user.name, title, content)
-    await loadApi()
-  }
-
-  const handleModalDeleteOpen = (id: number) => {
-    setModalDeleteOpen(true)
-    setIdPost(id)
-  }
-
-  const handleModalUpdateOpen = (id: number) => {
-    setModalUpdateOpen(true)
-    setIdPost(id)
-  }
-
-  const handleCancelModel = () => {
-    setModalDeleteOpen(false)
-    setModalUpdateOpen(false)
-  }
-  const handleDeletePost = async () => {
-    await api.deletePost(idPost)
-    await loadApi()
-    setModalDeleteOpen(false)
-    goToTop()
-  }
-
-  const handleUpdatePost = async (title: string, content: string) => {
-    await api.updatePost(idPost, title, content)
-    await loadApi()
-    setModalUpdateOpen(false)
-    goToTop()
-  }
-
-  useEffect(() => {
-    try {
-      void loadApi()
-    } catch (error) {
-      console.log(error)
+  const handlePreviousPagination = () => {
+    if (data.previous) {
+      dispatch(paginationPost(data.previous))
+      goToTop()
     }
-  }, [])
+  }
+
+  const handleLastPage = () => {
+    if (data.next) {
+      const numberPage = Math.floor(Number(data.count) / 10) * 10
+
+      const lastPage = data.next.slice(0, -2) + numberPage
+
+      dispatch(paginationPost(lastPage))
+
+      goToTop()
+    }
+  }
 
   useEffect(() => {
-    void pagination()
-    goToTop()
-  }, [page])
+    dispatch(getAllPost())
+  }, [dispatch])
 
   return (
     <KeyboardArea behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-      <ModalDelete
-        activeModal={modalDeleteOpen}
-        cancelModelClosed={handleCancelModel}
-        deletePost={handleDeletePost}
-      />
-      <ModalUpdate
-        activeModal={modalUpdateOpen}
-        cancelModelClosed={handleCancelModel}
-        updatePost={handleUpdatePost}
-      />
+      <ModalDelete />
+      <ModalUpdate />
 
       <Container>
         <ArearForm>
           <FlatList
             ref={flatListRef}
-            data={listPost}
+            data={data.results}
             keyExtractor={(item) => item.id.toString()}
-            ListEmptyComponent={() => <ListEmpty message="Load Post" />}
+            ListEmptyComponent={() => <ListEmpty />}
             renderItem={({ item }) => (
               <Comment
                 id={item.id}
@@ -143,8 +86,6 @@ export function MainScreen() {
                 created_datetime={item.created_datetime}
                 title={item.title}
                 username={item.username}
-                modalDeleteActive={handleModalDeleteOpen}
-                modalUpdateActive={handleModalUpdateOpen}
               />
             )}
             ListHeaderComponent={() => (
@@ -152,29 +93,56 @@ export function MainScreen() {
                 <Header>
                   <Title>MainScreen</Title>
                 </Header>
-                <Post createPost={handleClickCreatePost} />
+                <Post />
               </>
             )}
             ListFooterComponent={() => (
               <AreaButton>
                 <Button
-                  onPress={() => setPage((old) => Math.max(old - 10, 0))}
-                  disabled={page < 10}
-                  style={page < 10 ? [{ opacity: 0.5 }] : [{ opacity: 1 }]}
-                >
-                  <ButtonText>Back</ButtonText>
-                </Button>
-                <Button
-                  onPress={() => setPage((old) => old + 10)}
-                  disabled={data?.next === null}
+                  title="<<"
+                  onPress={handleFirstPage}
+                  disabled={data.previous === null || isLoading}
                   style={
-                    data?.next === null || listPost.length === 0
+                    data.previous === null || isLoading
                       ? [{ opacity: 0.5 }]
                       : [{ opacity: 1 }]
                   }
-                >
-                  <ButtonText>next</ButtonText>
-                </Button>
+                  styleType="senary"
+                />
+
+                <Button
+                  title="Back"
+                  onPress={handlePreviousPagination}
+                  disabled={data.previous === null || isLoading}
+                  style={
+                    data.previous === null || isLoading
+                      ? [{ opacity: 0.5 }]
+                      : [{ opacity: 1 }]
+                  }
+                  styleType="senary"
+                />
+                <Button
+                  title="Next"
+                  onPress={handleNextPagination}
+                  disabled={data.next === null || isLoading}
+                  style={
+                    data.next === null || isLoading
+                      ? [{ opacity: 0.5 }]
+                      : [{ opacity: 1 }]
+                  }
+                  styleType="senary"
+                />
+                <Button
+                  title=">>"
+                  onPress={handleLastPage}
+                  disabled={data.next === null || isLoading}
+                  style={
+                    data.next === null || isLoading
+                      ? [{ opacity: 0.5 }]
+                      : [{ opacity: 1 }]
+                  }
+                  styleType="senary"
+                />
               </AreaButton>
             )}
           />

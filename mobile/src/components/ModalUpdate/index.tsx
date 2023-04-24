@@ -4,40 +4,40 @@ import {
   Container,
   Title,
   AreaPopUp,
-  AreaButtomCancel,
-  ButtonTextCancel,
-  AreaButtomSave,
-  ButtonTextSave,
   ModalUpdateArea,
   InputTitle,
   Text,
   TextArea
-} from './style'
+} from './styles'
 import { useState } from 'react'
+import { useAppDispatch, useAppSelector } from '@redux/hooks/useAppSelector'
+import { updatePost } from '@redux/thunks/postThunks'
+import { setModalUpdate } from '@actions/modal'
+import { Button } from '@components/Button'
 
-interface Props {
-  activeModal: boolean
-  cancelModelClosed: () => void
-  updatePost: (title: string, content: string) => void
-}
-
-export function ModalUpdate({
-  activeModal,
-  cancelModelClosed,
-  updatePost
-}: Props) {
+export function ModalUpdate() {
   const [title, setTitle] = useState('')
-  const [post, setPost] = useState('')
+  const [content, setContent] = useState('')
+
+  const dispatch = useAppDispatch()
+
+  const { id, isModalUpdate } = useAppSelector((state) => state.modal)
 
   const handleCancelUpdate = () => {
-    cancelModelClosed()
-    setPost('')
+    dispatch(setModalUpdate(false))
+    setContent('')
     setTitle('')
   }
 
   const handleUpdatePost = () => {
-    updatePost(title, post)
-    setPost('')
+    const update = {
+      id,
+      title,
+      content
+    }
+    dispatch(updatePost(update))
+    dispatch(setModalUpdate(false))
+    setContent('')
     setTitle('')
   }
   const handlePostUpdate = () => {
@@ -54,7 +54,7 @@ export function ModalUpdate({
   }
 
   return (
-    <ModalUpdateArea animationType="slide" transparent visible={activeModal}>
+    <ModalUpdateArea animationType="slide" transparent visible={isModalUpdate}>
       <Container>
         <AreaPopUp>
           <Title>Edit item</Title>
@@ -73,24 +73,28 @@ export function ModalUpdate({
             placeholder="Content here"
             numberOfLines={3}
             maxLength={250}
-            value={post}
-            onChangeText={setPost}
+            value={content}
+            onChangeText={setContent}
           />
           <AreaButton>
-            <AreaButtomCancel onPress={handleCancelUpdate}>
-              <ButtonTextCancel>Cancel</ButtonTextCancel>
-            </AreaButtomCancel>
-            <AreaButtomSave
-              onPress={handlePostUpdate}
-              disabled={title.trim().length === 0 || post.trim().length === 0}
+            <Button
+              styleType="tertiary"
+              title="Cancel"
+              onPress={handleCancelUpdate}
+            />
+            <Button
+              title="Save"
+              styleType="quaternary"
+              disabled={
+                title.trim().length === 0 || content.trim().length === 0
+              }
               style={
-                title.trim().length === 0 || post.trim().length === 0
+                title.trim().length === 0 || content.trim().length === 0
                   ? [{ opacity: 0.5 }]
                   : [{ opacity: 1 }]
               }
-            >
-              <ButtonTextSave>Save</ButtonTextSave>
-            </AreaButtomSave>
+              onPress={handlePostUpdate}
+            />
           </AreaButton>
         </AreaPopUp>
       </Container>

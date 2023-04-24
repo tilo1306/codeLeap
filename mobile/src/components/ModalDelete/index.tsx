@@ -1,27 +1,26 @@
 import { Alert } from 'react-native'
+import { useAppDispatch, useAppSelector } from '@redux/hooks/useAppSelector'
+import { deletePost } from '@redux/thunks/postThunks'
+import { setModalDelete } from '@actions/modal'
 import {
   AreaButton,
   Container,
   Title,
   ModalDeleteArea,
-  AreaPopUp,
-  AreaButtomCancel,
-  ButtonTextCancel,
-  AreaButtomDelete,
-  ButtonTextDelete
-} from './style'
+  AreaPopUp
+} from './styles'
+import { Button } from '@components/Button'
 
-interface Props {
-  activeModal: boolean
-  cancelModelClosed: () => void
-  deletePost: () => void
-}
+export function ModalDelete() {
+  const dispatch = useAppDispatch()
 
-export function ModalDelete({
-  activeModal,
-  cancelModelClosed,
-  deletePost
-}: Props) {
+  const { id, isModalDelete } = useAppSelector((state) => state.modal)
+
+  const handleDelete = () => {
+    dispatch(deletePost(id))
+    dispatch(setModalDelete(false))
+  }
+
   function handlePostRemove() {
     Alert.alert('Remover', `Really want to remove post ?`, [
       {
@@ -30,23 +29,27 @@ export function ModalDelete({
       },
       {
         text: 'Sim',
-        onPress: () => deletePost()
+        onPress: () => handleDelete()
       }
     ])
   }
 
   return (
-    <ModalDeleteArea animationType="slide" transparent visible={activeModal}>
+    <ModalDeleteArea animationType="slide" transparent visible={isModalDelete}>
       <Container>
         <AreaPopUp>
           <Title>Are you sure you want to delete this item?</Title>
           <AreaButton>
-            <AreaButtomCancel onPress={cancelModelClosed}>
-              <ButtonTextCancel>Cancel</ButtonTextCancel>
-            </AreaButtomCancel>
-            <AreaButtomDelete onPress={handlePostRemove}>
-              <ButtonTextDelete>Delete</ButtonTextDelete>
-            </AreaButtomDelete>
+            <Button
+              title="Cancel"
+              styleType="tertiary"
+              onPress={() => dispatch(setModalDelete(false))}
+            />
+            <Button
+              title="Delete"
+              styleType="quaternary"
+              onPress={handlePostRemove}
+            />
           </AreaButton>
         </AreaPopUp>
       </Container>

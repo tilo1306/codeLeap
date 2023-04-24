@@ -37,25 +37,9 @@ export const Input = styled.TextInput`
   padding: 8px;
   width: 100%;
 `
-export const Div = styled.View`
+export const AreaButton = styled.View`
   display: flex;
   align-items: flex-end;
   margin-top: 16px;
   width: 100%;
-`
-
-export const Buttom = styled.TouchableOpacity`
-  background: ${({ theme }) => theme.COLORS.BLUE};
-  border: none;
-  border-radius: 8px;
-  color: ${({ theme }) => theme.COLORS.WHITE};
-  font-size: ${({ theme }) => theme.FONT_SIZE.MD}px;
-  width: 111px;
-  padding: 7px;
-  align-items: center;
-`
-export const ButtonText = styled.Text`
-  color: ${({ theme }) => theme.COLORS.WHITE};
-  font-size: ${({ theme }) => theme.FONT_SIZE.MD}px;
-  font-family: ${({ theme }) => theme.FONT_FAMILY.BOLD};
 `

@@ -41,17 +41,3 @@ export const AreaButton = styled.View`
   margin-top: 24px;
   align-items: flex-end;
 `
-
-export const Button = styled.TouchableOpacity`
-  background: ${({ theme }) => theme.COLORS.BLUE};
-  border: none;
-  border-radius: 8px;
-  width: 100px;
-  align-items: center;
-  padding: 7px;
-`
-export const ButtonText = styled.Text`
-  color: ${({ theme }) => theme.COLORS.WHITE};
-  font-size: ${({ theme }) => theme.FONT_SIZE.SM}px;
-  font-family: ${({ theme }) => theme.FONT_FAMILY.BOLD};
-`
