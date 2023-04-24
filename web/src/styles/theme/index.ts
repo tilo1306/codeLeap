@@ -8,7 +8,7 @@ export default {
     BLACK: '#000000',
     RED: '#FF5151',
     GREEN: '#74B960',
-    GRAY60: '#999999',
+    GRAY60: '#47B960',
   },
   FONT_FAMILY: {
     REGULAR: 'Roboto',
