@@ -63,7 +63,7 @@ Foi desenvolvido uma pagina e aplicativo de publicação de mesagens.
 
 - O modo de estilizar um componente utilizando a biblioteca Styled Components também é conhecido como CSS-in-JS (CSS dentro do JavaScript).
 
-#### :hammer: Executar Aplicação
+## :hammer: Executar Aplicação
 
 ### Web
 
@@ -87,7 +87,7 @@ Foi desenvolvido uma pagina e aplicativo de publicação de mesagens.
 
 5- No terminal mostrar uma url copie e cole no seu navegador de preferencia.
 
-###Mobile
+### Mobile
 
 1- Realizar o clone desse projeto.
 
@@ -103,7 +103,7 @@ Foi desenvolvido uma pagina e aplicativo de publicação de mesagens.
 
 - `expo start`
 
-##### Usando um cabo USB
+#### Usando um cabo USB
 
 1- No sistema operaciona windows/linux o expo so funciona em celulares android.
 
