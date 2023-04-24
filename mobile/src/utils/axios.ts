@@ -10,6 +10,7 @@ export const api = {
     return response.data
   },
   createPost: async (username: string, title: string, content: string) => {
+    console.log(username)
     const response = await request.post('/', {
       username,
       title,
@@ -28,8 +29,8 @@ export const api = {
     const response = await request.delete(`/${id}/`, {})
     return response.data
   },
-  pagination: async (page: number) => {
-    const response = await request.get(`?format=json&limit=10&offset=${page}`)
+  pagination: async (page: string) => {
+    const response = await request.get(page)
     return response.data
   }
 }

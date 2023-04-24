@@ -1,13 +1,10 @@
-import { Container, Message } from './style'
+import { ActivityIndicator } from 'react-native'
+import { Container } from './styles'
 
-type Props = {
-  message: string
-}
-
-export function ListEmpty({ message }: Props) {
+export function ListEmpty() {
   return (
     <Container>
-      <Message>{message}</Message>
+      <ActivityIndicator size="large" color="#0000ff" />
     </Container>
   )
 }

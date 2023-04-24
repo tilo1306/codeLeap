@@ -1,23 +1,17 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
-import { useDispatch } from 'react-redux'
-import {
-  AreaLogin,
-  Container,
-  Title,
-  Text,
-  Input,
-  Div,
-  Buttom,
-  ButtonText
-} from './style'
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { useNavigation } from '@react-navigation/native'
-import { setName } from '@redux/reducers/userReducer'
 import { userCreate } from '@storage/user/userCreate'
+import { setName } from '@actions/user'
+import { Button } from '@components/Button'
+
+import { AreaLogin, Container, Title, Text, Input, AreaButton } from './styles'
 
 export function SignUp() {
-  const dispatch = useDispatch()
   const [username, setUsername] = useState<string>('')
+
+  const dispatch = useDispatch()
 
   const { navigate } = useNavigation()
 
@@ -39,8 +33,9 @@ export function SignUp() {
           onChangeText={setUsername}
           returnKeyType="send"
         />
-        <Div>
-          <Buttom
+        <AreaButton>
+          <Button
+            title="Enter"
             onPress={handleSubmit}
             style={
               username.trim().length === 0
@@ -48,10 +43,9 @@ export function SignUp() {
                 : [{ opacity: 1 }]
             }
             disabled={username.trim().length === 0}
-          >
-            <ButtonText>Enter</ButtonText>
-          </Buttom>
-        </Div>
+            styleType="quinary"
+          />
+        </AreaButton>
       </AreaLogin>
     </Container>
   )

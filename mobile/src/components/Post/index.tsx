@@ -5,24 +5,32 @@ import {
   Text,
   AreaButton,
   InputTitle,
-  TextArea,
-  ButtonText,
-  Button
-} from './style'
+  TextArea
+} from './styles'
+import { useAppDispatch, useAppSelector } from '@redux/hooks/useAppSelector'
+import { createPost } from '@redux/thunks/postThunks'
+import { Button } from '@components/Button'
 
-interface Props {
-  createPost: (title: string, content: string) => void
-}
-
-export function Post({ createPost }: Props) {
+export function Post() {
   const [title, setTitle] = useState('')
-  const [post, setPost] = useState('')
+  const [content, setcontent] = useState('')
+
+  const dispatch = useAppDispatch()
+
+  const { name } = useAppSelector((state) => state.user)
 
   const handleCreatePost = () => {
-    createPost(title, post)
+    const newPost = {
+      username: name,
+      title,
+      content
+    }
+
+    dispatch(createPost(newPost))
     setTitle('')
-    setPost('')
+    setcontent('')
   }
+
   return (
     <AreaPost>
       <HeaderTitle>What’s on your mind?</HeaderTitle>
@@ -41,14 +49,24 @@ export function Post({ createPost }: Props) {
         placeholder="Content here"
         numberOfLines={3}
         maxLength={250}
-        value={post}
-        onChangeText={setPost}
+        value={content}
+        onChangeText={setcontent}
       />
 
       <AreaButton>
-        <Button onPress={handleCreatePost}>
-          <ButtonText onPress={handleCreatePost}>Enter</ButtonText>
-        </Button>
+        <Button
+          title="Enter"
+          onPress={handleCreatePost}
+          disabled={
+            !!(title.trim().length === 0 || content.trim().length === 0)
+          }
+          style={
+            title.trim().length === 0 || content.trim().length === 0
+              ? [{ opacity: 0.5 }]
+              : [{ opacity: 1 }]
+          }
+          styleType="secondary"
+        />
       </AreaButton>
     </AreaPost>
   )

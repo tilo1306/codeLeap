@@ -36,16 +36,3 @@ export const AreaButton = styled.View`
   justify-content: space-between;
   padding: 5px 24px;
 `
-export const Button = styled.TouchableOpacity`
-  background: ${({ theme }) => theme.COLORS.BLUE};
-  border: none;
-  border-radius: 8px;
-  width: 120px;
-  align-items: center;
-  padding: 7px 0;
-`
-export const ButtonText = styled.Text`
-  color: ${({ theme }) => theme.COLORS.WHITE};
-  font-size: ${({ theme }) => theme.FONT_SIZE.LG}px;
-  font-family: ${({ theme }) => theme.FONT_FAMILY.BOLD};
-`

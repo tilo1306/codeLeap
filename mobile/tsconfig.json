@@ -8,6 +8,9 @@
       "@assets/*": [
         "./src/assets/*"
       ],
+       "@actions/*": [
+        "./src/actions/*"
+      ],
       "@components/*": [
         "./src/components/*"
       ],

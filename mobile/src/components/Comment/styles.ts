@@ -27,6 +27,7 @@ export const HeaderTitle = styled.Text`
 
 export const ContextArea = styled.View`
   margin: 24px;
+  height: auto;
 `
 
 export const HeaderContext = styled.View`
@@ -49,7 +50,7 @@ export const Time = styled.Text`
 
 export const AreaTextContext = styled.View`
   flex: 1;
-  min-height: 100%;
+  height: 100%;
 `
 
 export const TextContext = styled.Text`
